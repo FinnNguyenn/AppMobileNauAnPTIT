@@ -50,7 +50,7 @@ public class SeacrchFoodByNameActivity extends AppCompatActivity {
         });
 
         BottomNavigationView botNav = findViewById(R.id.bottomNavView);
-        botNav.setSelectedItemId(R.id.menuHome);
+        botNav.setSelectedItemId(R.id.menuSearch);
 
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();

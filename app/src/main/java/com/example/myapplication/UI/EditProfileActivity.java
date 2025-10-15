@@ -39,7 +39,6 @@ public class EditProfileActivity extends AppCompatActivity{
     private Button btnSave;
     private User user;
     private ImageView btnBack;
-    private boolean isUserExit = false;
     private EditText myConfirmPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +83,14 @@ public class EditProfileActivity extends AppCompatActivity{
                 String id = user.getId();
 
                 User user2 = new User(id,username,password,fullname,address,email,phone);
-
+                if(user2.getPassword().isEmpty()){
+                    user2.setPassword(user.getPassword());
+                }
                 if(isSameUser(user,user2)){
                     Intent intent = new Intent(EditProfileActivity.this, ProfileeActivity.class);
                     intent.putExtra("user",user);
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     String confirmPassword = myConfirmPassword.getText().toString();
@@ -96,13 +98,13 @@ public class EditProfileActivity extends AppCompatActivity{
                         if (!password.equals(confirmPassword)) {
                             Toast.makeText(EditProfileActivity.this, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
-                        if (!username.equals(user.getUsername())) {
-                            findUser(user2);
-                        } else {
+                        else{
                             changeProfile(user2);
                         }
+                    }
+                    else {
+                        user2.setPassword(user.getPassword());
+                        changeProfile(user2);
                     }
                 }
 
@@ -112,31 +114,29 @@ public class EditProfileActivity extends AppCompatActivity{
 
     }
     private void changeProfile(User user2){
-        String url = "https://mobilenodejs.onrender.com/api/nguoidung/patch";
+        String url = "https://661r3b81-3000.asse.devtunnels.ms/api/nguoidung/patch";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         HashMap<String,String> params = new HashMap<>();
-        params.put("id",user2.getId());
+        params.put("_id",user2.getId());
         params.put("username",user2.getUsername());
         params.put("password",user2.getPassword());
         params.put("name",user2.getFullname());
         params.put("address",user2.getAddress());
         params.put("email",user2.getEmail());
         params.put("phone",user2.getTel());
-        System.out.println(params.get("id"));
         JSONObject jsonBody = new JSONObject(params);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.PATCH,
                 url,
                 jsonBody,
-                response -> {
+                response ->{
                     try {
-                        String status = response.getString("status");
+                        String status = response.optString("status","");
                         if (status.equals("success")) {
                             Toast.makeText(EditProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditProfileActivity.this, ProfileeActivity.class);
-                            intent.putExtra("User",user2);
+                            intent.putExtra("user",user2);
                             startActivity(intent);
-                            finish();
                         }
                         else{
                             Toast.makeText(EditProfileActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
@@ -146,7 +146,13 @@ public class EditProfileActivity extends AppCompatActivity{
                         Toast.makeText(EditProfileActivity.this, "Lỗi parse JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(EditProfileActivity.this,  "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show()
+                error -> {
+                    if (error.networkResponse != null && (error.networkResponse.statusCode == 409 || error.networkResponse.statusCode == 400)) {
+                        Toast.makeText(EditProfileActivity.this, "Username này đã tồn tại, vui lòng chọn tên khác.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(EditProfileActivity.this, "Lỗi kết nối hoặc server có vấn đề: " + error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
         );
         requestQueue.add(jsonObjectRequest);
 
@@ -161,34 +167,5 @@ public class EditProfileActivity extends AppCompatActivity{
                 Objects.equals(u1.getEmail(), u2.getEmail()) &&
                 Objects.equals(u1.getTel(), u2.getTel());
     }
-    private void findUser(User user2){
-        String url = "https://mobilenodejs.onrender.com/api/nguoidung";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        HashMap<String,String> params = new HashMap<>();
-        params.put("username", user2.getUsername());
-        JSONObject jsonBody = new JSONObject(params);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                jsonBody,
-                response -> {
-                    try {
-                        String name = response.optString("name", "");
-                        if (!name.isEmpty()) {
-                            Toast.makeText(EditProfileActivity.this, "Username đã tồn tại", Toast.LENGTH_SHORT).show();
-                        } else {
-                            changeProfile(user2);
-                        }
-                    } catch (Exception e) {
-                        Toast.makeText(EditProfileActivity.this, "Lỗi parse JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                },
-                error -> {
-                    Toast.makeText(EditProfileActivity.this,  "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show();
-                    isUserExit = false;
-                }
 
-        );
-        requestQueue.add(jsonObjectRequest);
-    }
 }

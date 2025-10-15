@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.myapplication.model.User;
@@ -37,8 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister;
     private Button btnBack;
 
-    private boolean isUserExit = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,26 +50,9 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.editRegisterEmail);
         tel = findViewById(R.id.editRegisterPhone);
         btnRegister = findViewById(R.id.button2);
-        errorMessage = findViewById(R.id.errorMessage);
         confirmPassword = findViewById(R.id.editConfirmPassword);
         btnBack = findViewById(R.id.buttonBack);
 
-        username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String userName = s.toString().trim();
-                findUser(userName);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,28 +64,25 @@ public class RegisterActivity extends AppCompatActivity {
                 String Tel = tel.getText().toString();
                 String confirmpassword = confirmPassword.getText().toString();
                 if(userName.isEmpty()){
-                    displayError("Username is required");
-                }
-                else if(isUserExit){
-                    displayError("Username đã tồn tại");
+                    Toast.makeText(RegisterActivity.this, "Username is required", Toast.LENGTH_SHORT).show();
                 }
                 else if(passWord.isEmpty()){
-                    displayError("Password is required");
+                    Toast.makeText(RegisterActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
                 }
                 else if(!passWord.equals(confirmpassword)){
-                    displayError("Password does not match");
+                    Toast.makeText(RegisterActivity.this, "Password does not match", Toast.LENGTH_SHORT).show();
                 }
                 else if(fullName.isEmpty()){
-                    displayError("Fullname is required");
+                    Toast.makeText(RegisterActivity.this, "Fullname is required", Toast.LENGTH_SHORT).show();
                 }
                 else if(Address.isEmpty()){
-                    displayError("Address is required");
+                    Toast.makeText(RegisterActivity.this, "Address is required", Toast.LENGTH_SHORT).show();
                 }
                 else if(Email.isEmpty()){
-                    displayError("Email is required");
+                    Toast.makeText(RegisterActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
                 }
                 else if(Tel.isEmpty()){
-                    displayError("Tel is required");
+                    Toast.makeText(RegisterActivity.this, "Tel is required", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     User user = new User(userName,passWord,fullName,Address,Email,Tel);
@@ -122,12 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-    private void displayError(String message){
-        if(errorMessage != null){
-            errorMessage.setText(message);
-            errorMessage.setVisibility(View.VISIBLE);
-        }
-    }
+
     private void RegisterWithAPI(User user){
         String url = "https://mobilenodejs.onrender.com/api/nguoidung/register";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -148,49 +122,27 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         String name = response.getString("name");
                         if (!name.isEmpty()) {
-                            displayError("Đăng ký thành công");
+                            Toast.makeText(RegisterActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
-                            displayError("Lỗi thông tin đăng kí");
+                            Toast.makeText(RegisterActivity.this, "", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        displayError("Lỗi parse JSON: " + e.getMessage());
-                    }
-                },
-                error -> displayError("Lỗi kết nối: " + error.toString())
-        );
-
-        requestQueue.add(jsonObjectRequest);
-    }
-    private void findUser(String username){
-        String url = "https://mobilenodejs.onrender.com/api/nguoidung";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        HashMap<String,String> params = new HashMap<>();
-        params.put("username",username);
-        JSONObject jsonBody = new JSONObject(params);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                jsonBody,
-                response -> {
-                    try {
-                        String name = response.getString("name");
-                        if (!name.isEmpty()) {
-                            isUserExit = true;
-                        }
-                    } catch (Exception e) {
-                        displayError("Lỗi parse JSON: " + e.getMessage());
-                        isUserExit = false;
+                        Toast.makeText(RegisterActivity.this, "Lỗi parse JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
-                    displayError("Lỗi kết nối: " + error.toString());
-                    isUserExit = false;
+                    if (error.networkResponse != null && (error.networkResponse.statusCode == 409 || error.networkResponse.statusCode == 400)) {
+                        Toast.makeText(RegisterActivity.this, "Username này đã tồn tại, vui lòng chọn tên khác.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Lỗi kết nối hoặc server có vấn đề: " + error.toString(), Toast.LENGTH_LONG).show();
+                    }
                 }
-
         );
+
         requestQueue.add(jsonObjectRequest);
     }
+
 
 }

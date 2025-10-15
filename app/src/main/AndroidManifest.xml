@@ -44,6 +44,8 @@
             android:exported="true"/>
         <activity android:name=".UI.DetailFoodActivity"
             android:exported="true"/>
+        <activity android:name=".UI.AddFoodPostActivity"
+            android:exported="true"/>
 
     </application>
 

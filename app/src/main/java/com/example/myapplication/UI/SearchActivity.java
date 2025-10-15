@@ -63,9 +63,28 @@ public class SearchActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int rowCount = tableLayout.getChildCount();
-                if (rowCount >= 4) {
-                    Toast.makeText(SearchActivity.this, "Chỉ được thêm tối đa 4 dòng!", Toast.LENGTH_SHORT).show();
+                int emptyRowCount = 0;
+                for (int i = 0; i < tableLayout.getChildCount(); i++) {
+                    View child = tableLayout.getChildAt(i);
+
+                    if (child instanceof TableRow) {
+                        TableRow row = (TableRow) child;
+
+                        EditText etTen = row.findViewById(R.id.textTen);
+                        EditText etDinhLuong = row.findViewById(R.id.editDinhLuong);
+
+                        if (etTen != null && etDinhLuong != null) {
+                            boolean isTenEmpty = etTen.getText().toString().trim().isEmpty();
+                            boolean isDinhLuongEmpty = etDinhLuong.getText().toString().trim().isEmpty();
+                            if (isTenEmpty && isDinhLuongEmpty) {
+                                emptyRowCount++;
+                            }
+                        }
+                    }
+                }
+
+                if (emptyRowCount >= 4) {
+                    Toast.makeText(SearchActivity.this, "Đã có 4 dòng trống. Vui lòng điền thông tin trước!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 TableRow newRow = (TableRow) LayoutInflater.from(SearchActivity.this)
@@ -121,7 +140,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        btnSearch = findViewById(R.id.btnSearch);
+        btnSearch = findViewById(R.id.barSearch);
         btnSearch.setOnClickListener(v -> {
             Intent a = new Intent(SearchActivity.this, SeacrchFoodByNameActivity.class);
             a.putExtra("user", user);
@@ -129,7 +148,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         BottomNavigationView botNav = findViewById(R.id.bottomNavView);
-        botNav.setSelectedItemId(R.id.menuHome);
+        botNav.setSelectedItemId(R.id.menuSearch);
 
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();
@@ -146,6 +165,11 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.menuSearch){
                 Intent intent2 = new Intent(SearchActivity.this, SearchActivity.class);
+                intent2.putExtra("user", user);
+                startActivity(intent2);
+                return true;
+            } else if (id == R.id.menuAdd){
+                Intent intent2 = new Intent(SearchActivity.this, AddFoodPostActivity.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;

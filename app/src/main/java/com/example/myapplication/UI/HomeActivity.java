@@ -2,6 +2,7 @@ package com.example.myapplication.UI;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.content.Intent;
@@ -38,6 +39,9 @@ public class HomeActivity extends AppCompatActivity{
     private MyArrayAdapter myAdapter;
     private ArrayList<NguyenLieu> nguyenLieu;
 
+    Button btnFavorite;
+    Button btnRecommend;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -52,9 +56,23 @@ public class HomeActivity extends AppCompatActivity{
 
         gv = findViewById(R.id.gridFoods);
         listBD = new ArrayList<>();
+
+        btnFavorite = findViewById(R.id.btnFavorite);
+        btnRecommend = findViewById(R.id.btnRecommend);
         takeBD();
         myAdapter = new MyArrayAdapter(HomeActivity.this, R.layout.layout_item, listBD);
         gv.setAdapter(myAdapter);
+
+        btnFavorite.setOnClickListener(v -> {
+            takeFAV();
+            myAdapter = new MyArrayAdapter(HomeActivity.this, R.layout.layout_item, listBD);
+            gv.setAdapter(myAdapter);
+        });
+        btnRecommend.setOnClickListener(v -> {
+            takeBD();
+            myAdapter = new MyArrayAdapter(HomeActivity.this, R.layout.layout_item, listBD);
+            gv.setAdapter(myAdapter);
+        });
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,7 +97,6 @@ public class HomeActivity extends AppCompatActivity{
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
-
             } else if (id == R.id.menuProfile){
                 Intent intent2 = new Intent(HomeActivity.this, ProfileeActivity.class);
                 intent2.putExtra("user", user);
@@ -90,13 +107,16 @@ public class HomeActivity extends AppCompatActivity{
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
+            }else if(id == R.id.menuAdd){
+                Intent intent2 = new Intent(HomeActivity.this, AddFoodPostActivity.class);
+                intent2.putExtra("user", user);
+                startActivity(intent2);
+                return true;
             }
             return false;
         });
 
-
     }
-
     private void takeBD(){
         String url = "https://mobilenodejs.onrender.com/api/baidang";
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -105,7 +125,56 @@ public class HomeActivity extends AppCompatActivity{
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                     Request.Method.GET,
                     url,
-                    null, // Đặt null ở đây, vì ta sẽ override body
+                    null,
+                    response -> {
+                        try {
+                            listBD.clear();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject obj = response.getJSONObject(i);
+
+                                BaiDang baiDang = new BaiDang();
+                                baiDang.setId(obj.getString("_id"));
+                                baiDang.setTenMon(obj.getString("tenMon"));
+                                baiDang.setCachLam(obj.getString("cachLam"));
+                                baiDang.setNguyenLieuDinhLuong(obj.optString("nguyenLieuDinhLuong", ""));
+                                baiDang.setLinkYtb(obj.optString("linkYtb", ""));
+                                baiDang.setLuotThich(obj.optInt("luotThich", 0));
+                                baiDang.setImage(obj.optString("image", ""));
+
+                                JSONArray nlArray = obj.getJSONArray("nguyenLieu");
+                                nguyenLieu = new ArrayList<>();
+                                for(int j = 0; j < nlArray.length(); j++){
+                                    nguyenLieu.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
+                                }
+                                baiDang.setNguyenLieu(nguyenLieu);
+
+                                listBD.add(baiDang);
+                            }
+                            myAdapter.notifyDataSetChanged();
+
+
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Lỗi xử lý dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    error -> Toast.makeText(this, "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show()
+            );
+            queue.add(jsonArrayRequest);
+        } catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi tạo request", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void takeFAV(){
+        String url = "https://mobilenodejs.onrender.com/api/nguoidung/fav/" + user.getId();
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        try{
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    url,
+                    null,
                     response -> {
                         try {
                             listBD.clear();
@@ -146,22 +215,4 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 }
-
-
-
-//BottomNavigationView botNav = findViewById(R.id.bottomNavView);
-//        botNav.setSelectedItemId(R.id.menuHome);
-//
-//        botNav.setOnItemSelectedListener(menuItem -> {
-//int id = menuItem.getItemId();
-//            if (id == R.id.menuHome) {
-//startActivity(new Intent(DetailFoodActivity.this, MainActivity.class));
-//        } else if (id == R.id.menuProfile){
-//Intent intent = new Intent(DetailFoodActivity.this, ProfileeActivity.class);
-//startActivity(intent);
-//            } else if (id == R.id.menuSearch){
-//startActivity(new Intent(DetailFoodActivity.this, SearchActivity.class));
-//        }
-//        return false;
-//        });
 

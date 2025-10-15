@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -30,7 +30,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="570dp"
             android:orientation="vertical">
 
             <TextView
@@ -47,187 +47,187 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Full Name"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etFullName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Enter full name"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Phone"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etPhone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Enter phone"
                     android:inputType="phone"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Email"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etEmail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Enter email"
                     android:inputType="textEmailAddress"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Address"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etAddress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Enter address"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Username"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etUsername"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Enter username"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Password"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etPassword"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Enter password"
                     android:inputType="textPassword"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_height="61dp"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Confirm Password"
-                    android:textSize="16sp"
-                    android:gravity="center_vertical" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@drawable/grey_bg"
                     android:hint="Re-enter password"
                     android:inputType="textPassword"
-                    android:padding="12dp"
-                    android:background="@drawable/grey_bg" />
+                    android:padding="12dp" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save"
-                android:textSize="18sp"
-                android:textColor="@android:color/white"
                 android:backgroundTint="@color/colorPrimary"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:text="Save"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

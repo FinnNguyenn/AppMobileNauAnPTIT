@@ -10,11 +10,11 @@
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_margin="16dp"
         android:background="@drawable/white_rectangle_background"
-        android:contentDescription="Back"
+        android:contentDescription="@string/back"
         android:elevation="3dp"
         android:src="@drawable/ic_back"
         app:background="@color/colorWhite"
@@ -60,7 +60,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/logo_app" />
+                        app:srcCompat="@drawable/chef" />
 
                     <TextView
                         android:id="@+id/userFullName"
@@ -118,13 +118,14 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
+                                android:id="@+id/postsBtn"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="0.333333"
                                 android:background="@drawable/grey_bg"
-                                android:elevation="3dp"
                                 android:clickable="true"
+                                android:elevation="3dp"
                                 android:focusable="true"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:orientation="vertical">
@@ -160,13 +161,14 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/favorsBtn"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="0.333333"
                                 android:background="@drawable/grey_bg"
-                                android:elevation="3dp"
                                 android:clickable="true"
+                                android:elevation="3dp"
                                 android:focusable="true"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:orientation="vertical">
@@ -202,6 +204,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/editProfileBtn"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
@@ -260,7 +263,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/postNum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -292,7 +295,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView7"
+                                android:id="@+id/favNum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -324,7 +327,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView9"
+                                android:id="@+id/rateNum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -334,22 +337,20 @@
 
                         </LinearLayout>
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnLogout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
                             android:layout_marginStart="24dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginEnd="24dp"
                             android:layout_marginBottom="40dp"
-                            android:background="@drawable/rounded_button_bg"
-                            android:backgroundTint="@color/colorPrimary"
-                            android:padding="12dp"
+                            app:cornerRadius="22dp"
                             android:text="Logout"
                             android:textColor="@android:color/white"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            app:backgroundTint="@color/colorLogout"
+                            app:rippleColor="@color/colorLogoutDark" />
 
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -361,7 +362,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         app:backgroundTint="@color/colorWhite"
         app:itemIconSize="30dp"
         app:labelVisibilityMode="unlabeled"

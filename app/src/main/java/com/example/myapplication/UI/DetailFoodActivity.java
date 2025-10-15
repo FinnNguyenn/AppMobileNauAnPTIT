@@ -1,7 +1,9 @@
 package com.example.myapplication.UI;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -128,6 +131,11 @@ public class DetailFoodActivity extends AppCompatActivity {
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
+            }else if(id == R.id.menuAdd){
+                Intent intent2 = new Intent(DetailFoodActivity.this, AddFoodPostActivity.class);
+                intent2.putExtra("user", user);
+                startActivity(intent2);
+                return true;
             }
             return false;
         });
@@ -146,6 +154,29 @@ public class DetailFoodActivity extends AppCompatActivity {
         tab2.setContent(R.id.tab2);
         tab2.setIndicator("Hướng dẫn");
         tabHost.addTab(tab2);
+
+        tabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabhost_bg_slt);
+        TextView df = tabHost.getTabWidget().getChildAt(0).findViewById(android.R.id.title);
+        tabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabhost_bg_unslt);
+        TextView df1 = tabHost.getTabWidget().getChildAt(1).findViewById(android.R.id.title);
+        df.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        df1.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+
+        tabHost.setOnTabChangedListener(tabId -> {
+            for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+                View tabView = tabHost.getTabWidget().getChildAt(i);
+                TextView tv = tabView.findViewById(android.R.id.title);
+
+                if (i == tabHost.getCurrentTab()) {
+                    tv.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                    tabView.setBackgroundResource(R.drawable.tabhost_bg_slt);
+                } else {
+                    tv.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                    tabView.setBackgroundResource(R.drawable.tabhost_bg_unslt);
+                }
+            }
+        });
+
     }
 
     private String extractYoutubeVideoId(String url) {

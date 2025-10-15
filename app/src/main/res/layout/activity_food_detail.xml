@@ -14,8 +14,8 @@
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/white_rectangle_background"
         android:src="@drawable/ic_back"
         android:contentDescription="Back"
@@ -26,8 +26,8 @@
 
     <ImageButton
         android:id="@+id/btnFavorite"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/white_rectangle_background"
         android:src="@drawable/ic_favorite"
         android:contentDescription="favorite"
@@ -36,10 +36,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"/>
 
-    <ScrollView
+    <View
+        android:id="@+id/viewDivider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/scrollView"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:id="@+id/scrollView"
         app:layout_constraintTop_toBottomOf="@id/imgFood"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavView"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
@@ -52,7 +61,7 @@
                 android:id="@+id/txtFoodName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ba Chỉ Giòn Bì"
+                android:text="FoodName"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorAccent"
@@ -61,31 +70,35 @@
             <TabHost
                 android:id="@+id/tabBD"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:padding="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TabWidget
                         android:id="@android:id/tabs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/tab_bar_bg"
-                        android:gravity="center"
-                        android:tabStripEnabled="false" />
+                        android:layout_marginBottom="4dp"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:gravity="center" />
 
                     <FrameLayout
                         android:id="@android:id/tabcontent"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="8dp">
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:elevation="4dp">
 
                         <LinearLayout
                             android:id="@+id/tab1"
                             android:layout_width="match_parent"
                             android:layout_height="500dp"
+                            android:padding="8dp"
                             android:orientation="vertical">
                             <include
                                 android:id="@+id/layoutNL"
@@ -109,40 +122,13 @@
                 </LinearLayout>
             </TabHost>
 
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:orientation="horizontal"-->
-            <!--                android:background="@drawable/search_icon_background"-->
-            <!--                android:padding="4dp"-->
-            <!--                android:layout_marginBottom="16dp">-->
-
-            <!--                <Button-->
-            <!--                    android:id="@+id/btnIngredients"-->
-            <!--                    android:layout_width="0dp"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_weight="1"-->
-            <!--                    android:text="Nguyên liệu"-->
-            <!--                    android:backgroundTint="@color/colorPrimary"/>-->
-
-            <!--                <Button-->
-            <!--                    android:id="@+id/btnInstructions"-->
-            <!--                    android:layout_width="0dp"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_weight="1"-->
-            <!--                    android:text="Hướng dẫn"-->
-            <!--                    android:backgroundTint="@color/colorWhite"-->
-            <!--                    android:textColor="@color/colorAccent"/>-->
-
-            <!--            </LinearLayout>-->
-
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         app:backgroundTint="@color/colorWhite"
         app:itemIconSize="30dp"
         app:labelVisibilityMode="unlabeled"
