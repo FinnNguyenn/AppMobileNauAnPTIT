@@ -1,4 +1,4 @@
-package com.example.myapplication.UI;
+package com.example.myapplication.UI.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,19 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,25 +22,14 @@ import com.example.myapplication.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.myapplication.model.BaiDang;
 import com.example.myapplication.model.NguyenLieu;
-import com.example.myapplication.Adapter.ArrayNLAdapter;
-
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 
-import com.bumptech.glide.Glide;
-
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class AddFoodPostActivity extends AppCompatActivity {
+public class AddFoodFragment extends AppCompatActivity {
     private User user;
     private ArrayList<NguyenLieu> al;
     private Button btnCong;
@@ -80,7 +62,7 @@ public class AddFoodPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int rowCount = tableLayout.getChildCount();
-                TableRow newRow = (TableRow) LayoutInflater.from(AddFoodPostActivity.this)
+                TableRow newRow = (TableRow) LayoutInflater.from(AddFoodFragment.this)
                         .inflate(R.layout.table_layout, tableLayout, false);
 
                 EditText tv = newRow.findViewById(R.id.textTen);
@@ -100,7 +82,7 @@ public class AddFoodPostActivity extends AppCompatActivity {
                     tableLayout.removeViewAt(rowCount - 1);
                 }
                 else {
-                    Toast.makeText(AddFoodPostActivity.this, "Không thể xóa hết các dòng!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddFoodFragment.this, "Không thể xóa hết các dòng!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -114,7 +96,7 @@ public class AddFoodPostActivity extends AppCompatActivity {
                 EditText ten = firstOne.findViewById(R.id.editTen1);
                 NguyenLieu tmp = new NguyenLieu();
                 if(ten.getText().toString().isEmpty()) {
-                    Toast.makeText(AddFoodPostActivity.this, "Tên nguyên liệu không được để trống!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddFoodFragment.this, "Tên nguyên liệu không được để trống!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 tmp.setTen(ten.getText().toString());
@@ -148,24 +130,24 @@ public class AddFoodPostActivity extends AppCompatActivity {
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();
             if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(AddFoodPostActivity.this, HomeActivity.class);
+                Intent intent2 = new Intent(AddFoodFragment.this, HomeFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
 
             } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(AddFoodPostActivity.this, ProfileeActivity.class);
+                Intent intent2 = new Intent(AddFoodFragment.this, ProfileFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(AddFoodPostActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(AddFoodFragment.this, SearchFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             }
             else if(id == R.id.menuAdd){
-                Intent intent2 = new Intent(AddFoodPostActivity.this, AddFoodPostActivity.class);
+                Intent intent2 = new Intent(AddFoodFragment.this, AddFoodFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
@@ -208,20 +190,20 @@ public class AddFoodPostActivity extends AppCompatActivity {
                     try {
                         String status = response.getString("status");
                         if (status.equals("success")) {
-                            Toast.makeText(AddFoodPostActivity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(AddFoodPostActivity.this, DetailFoodActivity.class);
+                            Toast.makeText(AddFoodFragment.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(AddFoodFragment.this, DetailFoodFragment.class);
                             intent.putExtra("data", bd);
                             intent.putExtra("user", user);
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(AddFoodPostActivity.this, "Lỗi thông tin đăng kí", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddFoodFragment.this, "Lỗi thông tin đăng kí", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(AddFoodPostActivity.this, "Lỗi parse JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddFoodFragment.this, "Lỗi parse JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(AddFoodPostActivity.this, "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(AddFoodFragment.this, "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show()
         );
 
         requestQueue.add(jsonObjectRequest);

@@ -1,6 +1,5 @@
-package com.example.myapplication.UI;
+package com.example.myapplication.UI.fragments;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,7 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchFragment extends AppCompatActivity {
 
     private LinearLayout btnSearch;
     Button button;
@@ -84,10 +83,10 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 if (emptyRowCount >= 4) {
-                    Toast.makeText(SearchActivity.this, "Đã có 4 dòng trống. Vui lòng điền thông tin trước!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchFragment.this, "Đã có 4 dòng trống. Vui lòng điền thông tin trước!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                TableRow newRow = (TableRow) LayoutInflater.from(SearchActivity.this)
+                TableRow newRow = (TableRow) LayoutInflater.from(SearchFragment.this)
                         .inflate(R.layout.table_layout, tableLayout, false);
 
                 EditText tv = newRow.findViewById(R.id.textTen);
@@ -109,7 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                     tableLayout.removeViewAt(rowCount - 1);
                 }
                 else {
-                    Toast.makeText(SearchActivity.this, "Không thể xóa hết các dòng!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchFragment.this, "Không thể xóa hết các dòng!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -142,7 +141,7 @@ public class SearchActivity extends AppCompatActivity {
 
         btnSearch = findViewById(R.id.barSearch);
         btnSearch.setOnClickListener(v -> {
-            Intent a = new Intent(SearchActivity.this, SeacrchFoodByNameActivity.class);
+            Intent a = new Intent(SearchFragment.this, SeacrchFoodByNameActivity.class);
             a.putExtra("user", user);
             startActivity(a);
         });
@@ -153,23 +152,23 @@ public class SearchActivity extends AppCompatActivity {
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();
             if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(SearchActivity.this, HomeActivity.class);
+                Intent intent2 = new Intent(SearchFragment.this, HomeFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
 
             } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(SearchActivity.this, ProfileeActivity.class);
+                Intent intent2 = new Intent(SearchFragment.this, ProfileFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(SearchActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(SearchFragment.this, SearchFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             } else if (id == R.id.menuAdd){
-                Intent intent2 = new Intent(SearchActivity.this, AddFoodPostActivity.class);
+                Intent intent2 = new Intent(SearchFragment.this, AddFoodFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
@@ -224,12 +223,12 @@ public class SearchActivity extends AppCompatActivity {
                    }
 
                     if (bd.size() > 0) {
-                        Intent intent = new Intent(SearchActivity.this, FoundFoodActivity.class);
+                        Intent intent = new Intent(SearchFragment.this, FoundFoodActivity.class);
                         intent.putExtra("type", 1);
                         intent.putExtra("data", bd);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(SearchActivity.this, "Không tìm thấy món ăn nào phù hợp!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchFragment.this, "Không tìm thấy món ăn nào phù hợp!", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {

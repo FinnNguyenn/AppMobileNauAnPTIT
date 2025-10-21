@@ -1,29 +1,19 @@
-package com.example.myapplication.UI;
+package com.example.myapplication.UI.fragments;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.content.Intent;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.widget.EditText;
 import android.widget.Button;
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.myapplication.model.User;
 import com.example.myapplication.R;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONObject;
-
-import java.util.*;
 public class SeacrchFoodByNameActivity extends AppCompatActivity {
     private SearchView sv;
 
@@ -55,18 +45,18 @@ public class SeacrchFoodByNameActivity extends AppCompatActivity {
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();
             if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(SeacrchFoodByNameActivity.this, HomeActivity.class);
+                Intent intent2 = new Intent(SeacrchFoodByNameActivity.this, HomeFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
 
             } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(SeacrchFoodByNameActivity.this, ProfileeActivity.class);
+                Intent intent2 = new Intent(SeacrchFoodByNameActivity.this, ProfileFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(SeacrchFoodByNameActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(SeacrchFoodByNameActivity.this, SearchFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;

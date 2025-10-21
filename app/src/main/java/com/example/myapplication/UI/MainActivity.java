@@ -2,7 +2,6 @@ package com.example.myapplication.UI;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Intent;
 import androidx.activity.EdgeToEdge;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.myapplication.UI.fragments.HomeFragment;
 import com.example.myapplication.model.User;
 import com.example.myapplication.R;
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         if (!logginUser.getFullname().isEmpty()) {
-                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(MainActivity.this, HomeFragment.class);
                             intent.putExtra("user",logginUser);
                             startActivity(intent);
                         } else {

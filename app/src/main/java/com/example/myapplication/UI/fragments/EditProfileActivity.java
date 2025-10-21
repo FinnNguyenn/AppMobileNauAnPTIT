@@ -1,13 +1,9 @@
-package com.example.myapplication.UI;
+package com.example.myapplication.UI.fragments;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.content.Intent;
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.EditText;
@@ -22,8 +18,6 @@ import com.example.myapplication.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONObject;
 
@@ -59,7 +53,7 @@ public class EditProfileActivity extends AppCompatActivity{
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EditProfileActivity.this, ProfileeActivity.class);
+                Intent intent = new Intent(EditProfileActivity.this, ProfileFragment.class);
                 intent.putExtra("user",user);
                 startActivity(intent);
             }
@@ -87,7 +81,7 @@ public class EditProfileActivity extends AppCompatActivity{
                     user2.setPassword(user.getPassword());
                 }
                 if(isSameUser(user,user2)){
-                    Intent intent = new Intent(EditProfileActivity.this, ProfileeActivity.class);
+                    Intent intent = new Intent(EditProfileActivity.this, ProfileFragment.class);
                     intent.putExtra("user",user);
                     startActivity(intent);
                     finish();
@@ -134,7 +128,7 @@ public class EditProfileActivity extends AppCompatActivity{
                         String status = response.optString("status","");
                         if (status.equals("success")) {
                             Toast.makeText(EditProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(EditProfileActivity.this, ProfileeActivity.class);
+                            Intent intent = new Intent(EditProfileActivity.this, ProfileFragment.class);
                             intent.putExtra("user",user2);
                             startActivity(intent);
                         }

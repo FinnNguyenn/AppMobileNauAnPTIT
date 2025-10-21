@@ -1,20 +1,16 @@
-package com.example.myapplication.UI;
+package com.example.myapplication.UI.fragments;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.content.Intent;
-import androidx.activity.EdgeToEdge;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.widget.EditText;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.myapplication.Adapter.FoundFoodAdapter;
 import com.example.myapplication.model.BaiDang;
 import com.example.myapplication.model.NguyenLieu;
@@ -65,7 +61,7 @@ public class FoundFoodActivity extends AppCompatActivity{
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intentHehe = new Intent(FoundFoodActivity.this, DetailFoodActivity.class);
+                Intent intentHehe = new Intent(FoundFoodActivity.this, DetailFoodFragment.class);
                 BaiDang chonBD = bd.get(position);
                 Toast.makeText(FoundFoodActivity.this, "Bạn đã chọn món " + chonBD.getTenMon(), Toast.LENGTH_SHORT).show();
                 intentHehe.putExtra("data", chonBD);
@@ -80,18 +76,18 @@ public class FoundFoodActivity extends AppCompatActivity{
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();
             if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(FoundFoodActivity.this, HomeActivity.class);
+                Intent intent2 = new Intent(FoundFoodActivity.this, HomeFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
 
             } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(FoundFoodActivity.this, ProfileeActivity.class);
+                Intent intent2 = new Intent(FoundFoodActivity.this, ProfileFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(FoundFoodActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(FoundFoodActivity.this, SearchFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;

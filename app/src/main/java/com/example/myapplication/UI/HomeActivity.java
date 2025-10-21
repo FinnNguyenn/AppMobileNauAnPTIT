@@ -1,218 +1,148 @@
 package com.example.myapplication.UI;
+
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.TextView;
-import android.content.Intent;
-import androidx.activity.EdgeToEdge;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.widget.Toast;
-
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.myapplication.Adapter.MyArrayAdapter;
-import com.example.myapplication.model.BaiDang;
-import com.example.myapplication.model.NguyenLieu;
-import com.example.myapplication.model.User;
 import com.example.myapplication.R;
-
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.example.myapplication.UI.fragments.AddFoodFragment;
+import com.example.myapplication.UI.fragments.DetailFoodFragment;
+import com.example.myapplication.UI.fragments.HomeFragment;
+import com.example.myapplication.UI.fragments.ProfileFragment;
+import com.example.myapplication.UI.fragments.SearchFragment;
+import com.example.myapplication.model.BaiDang;
+import com.example.myapplication.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
-import java.util.*;
-public class HomeActivity extends AppCompatActivity{
-    private TextView errorMessage;
-    private TextView fullName;
+public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFoodItemSelectedListener {
 
-    private User user;
+    private static final String TAG_HOME    = "HomeFragment";
+    private static final String TAG_SEARCH  = "SearchFragment";
+    private static final String TAG_ADD     = "AddFoodFragment";
+    private static final String TAG_PROFILE = "ProfileFragment";
 
-    private GridView gv;
-    private ArrayList<BaiDang> listBD;
-    private MyArrayAdapter myAdapter;
-    private ArrayList<NguyenLieu> nguyenLieu;
+    private BottomNavigationView bottomNav;
+    private Fragment homeFragment, searchFragment, addFragment, profileFragment;
+    private Fragment activeFragment;
+    private final Deque<Integer> tabHistory = new ArrayDeque<>();
+    private int currentTabId = R.id.menuHome;
 
-    Button btnFavorite;
-    Button btnRecommend;
+    private User user; // object truyền cho các fragment
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.home);
-        Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("user");
-        String fullname = user.getFullname();
-        user.setFullname(fullname);
-        fullName = findViewById(R.id.textFullName);
-        fullName.setText(fullname);
+        setContentView(R.layout.home_host);
 
-        gv = findViewById(R.id.gridFoods);
-        listBD = new ArrayList<>();
+        user = (User) getIntent().getSerializableExtra("user");
+        bottomNav = findViewById(R.id.bottomNavView);
 
-        btnFavorite = findViewById(R.id.btnFavorite);
-        btnRecommend = findViewById(R.id.btnRecommend);
-        takeBD();
-        myAdapter = new MyArrayAdapter(HomeActivity.this, R.layout.layout_item, listBD);
-        gv.setAdapter(myAdapter);
+        setupFragments();
 
-        btnFavorite.setOnClickListener(v -> {
-            takeFAV();
-            myAdapter = new MyArrayAdapter(HomeActivity.this, R.layout.layout_item, listBD);
-            gv.setAdapter(myAdapter);
-        });
-        btnRecommend.setOnClickListener(v -> {
-            takeBD();
-            myAdapter = new MyArrayAdapter(HomeActivity.this, R.layout.layout_item, listBD);
-            gv.setAdapter(myAdapter);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int newTabId = item.getItemId();
+            if (newTabId == currentTabId) return true;
+
+            if (tabHistory.peekFirst() == null || tabHistory.peekFirst() != currentTabId) {
+                tabHistory.offerFirst(currentTabId);
+            }
+            switchFragment(newTabId, true);
+            currentTabId = newTabId;
+            return true;
         });
 
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Tab mặc định
+        bottomNav.setSelectedItemId(R.id.menuHome);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intentBD = new Intent(HomeActivity.this, DetailFoodActivity.class);
-                BaiDang chonBD = listBD.get(position);
-                Toast.makeText(HomeActivity.this, "Bạn đã chọn món " + chonBD.getTenMon(), Toast.LENGTH_SHORT).show();
-                intentBD.putExtra("data", chonBD);
-                intentBD.putExtra("user", user);
-                startActivity(intentBD);
+            public void handleOnBackPressed() {
+                // Quay về tab trước nếu có lịch sử
+                Integer previousTab = tabHistory.pollFirst();
+                if (previousTab != null) {
+                    bottomNav.setSelectedItemId(previousTab);
+                    switchFragment(previousTab, false);
+                    currentTabId = previousTab;
+                    return;
+                }
+
+                if (currentTabId != R.id.menuHome) {
+                    bottomNav.setSelectedItemId(R.id.menuHome);
+                    switchFragment(R.id.menuHome, false);
+                    currentTabId = R.id.menuHome;
+                    return;
+                }
+                
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                    return;
+                }
+
+                finish();
             }
         });
-
-
-        BottomNavigationView botNav = findViewById(R.id.bottomNavView);
-        botNav.setSelectedItemId(R.id.menuHome);
-
-        botNav.setOnItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(HomeActivity.this, HomeActivity.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(HomeActivity.this, ProfileeActivity.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(HomeActivity.this, SearchActivity.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            }else if(id == R.id.menuAdd){
-                Intent intent2 = new Intent(HomeActivity.this, AddFoodPostActivity.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            }
-            return false;
-        });
-
-    }
-    private void takeBD(){
-        String url = "https://mobilenodejs.onrender.com/api/baidang";
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        try{
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                    Request.Method.GET,
-                    url,
-                    null,
-                    response -> {
-                        try {
-                            listBD.clear();
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject obj = response.getJSONObject(i);
-
-                                BaiDang baiDang = new BaiDang();
-                                baiDang.setId(obj.getString("_id"));
-                                baiDang.setTenMon(obj.getString("tenMon"));
-                                baiDang.setCachLam(obj.getString("cachLam"));
-                                baiDang.setNguyenLieuDinhLuong(obj.optString("nguyenLieuDinhLuong", ""));
-                                baiDang.setLinkYtb(obj.optString("linkYtb", ""));
-                                baiDang.setLuotThich(obj.optInt("luotThich", 0));
-                                baiDang.setImage(obj.optString("image", ""));
-
-                                JSONArray nlArray = obj.getJSONArray("nguyenLieu");
-                                nguyenLieu = new ArrayList<>();
-                                for(int j = 0; j < nlArray.length(); j++){
-                                    nguyenLieu.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
-                                }
-                                baiDang.setNguyenLieu(nguyenLieu);
-
-                                listBD.add(baiDang);
-                            }
-                            myAdapter.notifyDataSetChanged();
-
-
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Lỗi xử lý dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    },
-                    error -> Toast.makeText(this, "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show()
-            );
-            queue.add(jsonArrayRequest);
-        } catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(this, "Lỗi tạo request", Toast.LENGTH_SHORT).show();
-        }
     }
 
-    private void takeFAV(){
-        String url = "https://mobilenodejs.onrender.com/api/nguoidung/fav/" + user.getId();
-        RequestQueue queue = Volley.newRequestQueue(this);
+    private void setupFragments() {
+        FragmentManager fm = getSupportFragmentManager();
+        homeFragment    = fm.findFragmentByTag(TAG_HOME);
+        searchFragment  = fm.findFragmentByTag(TAG_SEARCH);
+        addFragment     = fm.findFragmentByTag(TAG_ADD);
+        profileFragment = fm.findFragmentByTag(TAG_PROFILE);
 
-        try{
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                    Request.Method.GET,
-                    url,
-                    null,
-                    response -> {
-                        try {
-                            listBD.clear();
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject obj = response.getJSONObject(i);
+        if (homeFragment == null)    homeFragment    = HomeFragment.newInstance(user);
+//        if (searchFragment == null)  searchFragment  = SearchFragment.newInstance(user);
+//        if (addFragment == null)     addFragment     = AddFoodFragment.newInstance(user);
+//        if (profileFragment == null) profileFragment = ProfileFragment.newInstance(user);
 
-                                BaiDang baiDang = new BaiDang();
-                                baiDang.setId(obj.getString("_id"));
-                                baiDang.setTenMon(obj.getString("tenMon"));
-                                baiDang.setCachLam(obj.getString("cachLam"));
-                                baiDang.setNguyenLieuDinhLuong(obj.optString("nguyenLieuDinhLuong", ""));
-                                baiDang.setLinkYtb(obj.optString("linkYtb", ""));
-                                baiDang.setLuotThich(obj.optInt("luotThich", 0));
-                                baiDang.setImage(obj.optString("image", ""));
+        fm.beginTransaction()
+                .add(R.id.fragment_container, homeFragment, TAG_HOME)
+                .add(R.id.fragment_container, searchFragment, TAG_SEARCH).hide(searchFragment)
+                .add(R.id.fragment_container, addFragment, TAG_ADD).hide(addFragment)
+                .add(R.id.fragment_container, profileFragment, TAG_PROFILE).hide(profileFragment)
+                .commit();
 
-                                JSONArray nlArray = obj.getJSONArray("nguyenLieu");
-                                nguyenLieu = new ArrayList<>();
-                                for(int j = 0; j < nlArray.length(); j++){
-                                    nguyenLieu.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
-                                }
-                                baiDang.setNguyenLieu(nguyenLieu);
+        activeFragment = homeFragment;
+        currentTabId = R.id.menuHome;
+    }
 
-                                listBD.add(baiDang);
-                            }
-                            myAdapter.notifyDataSetChanged();
+    private void switchFragment(int tabId, boolean animate) {
+        Fragment target = getFragmentByTabId(tabId);
+        if (target == null || target == activeFragment) return;
 
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        if (animate) tx.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        tx.hide(activeFragment).show(target).commit();
+        activeFragment = target;
+    }
 
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Lỗi xử lý dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    },
-                    error -> Toast.makeText(this, "Lỗi kết nối: " + error.toString(), Toast.LENGTH_SHORT).show()
-            );
-            queue.add(jsonArrayRequest);
-        } catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(this, "Lỗi tạo request", Toast.LENGTH_SHORT).show();
+    private Fragment getFragmentByTabId(int tabId) {
+        if (tabId == R.id.menuHome) {
+            return homeFragment;
+        } else if (tabId == R.id.menuSearch) {
+            return searchFragment;
+        } else if (tabId == R.id.menuAdd) {
+            return addFragment;
+        } else if (tabId == R.id.menuProfile) {
+            return profileFragment;
         }
+        return null;
+    }
+
+    @Override
+    public void onFoodItemSelected(BaiDang baiDang) {
+        DetailFoodFragment detailFragment = DetailFoodFragment.newInstance(baiDang, user);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null) // This allows user to press back to return to HomeFragment
+                .commit();
     }
 }
-

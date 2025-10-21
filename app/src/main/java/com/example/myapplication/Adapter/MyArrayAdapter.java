@@ -1,6 +1,6 @@
 package com.example.myapplication.Adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,37 +11,42 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.model.BaiDang;
 
-public class MyArrayAdapter extends ArrayAdapter<BaiDang> {
-    Activity context;
-    int IdLayout;
-    ArrayList<BaiDang> mylist;
+import java.util.ArrayList;
 
-    public MyArrayAdapter(Activity context, int idLayout, ArrayList<BaiDang> mylist) {
-        super(context, idLayout, mylist);
-        this.context = context;
-        IdLayout = idLayout;
-        this.mylist = mylist;
+public class MyArrayAdapter extends ArrayAdapter<BaiDang> {
+
+    private final int idLayout;
+    private final ArrayList<BaiDang> myList;
+
+    public MyArrayAdapter(@NonNull Context context, int idLayout, @NonNull ArrayList<BaiDang> myList) {
+        super(context, idLayout, myList);
+        this.idLayout = idLayout;
+        this.myList = myList;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater myFlater = context.getLayoutInflater();
-        convertView = myFlater.inflate(IdLayout, null);
-        BaiDang myBaiDang = mylist.get(position);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(idLayout, parent, false);
+        }
+
+        BaiDang myBaiDang = myList.get(position);
+
         ImageView imgItem = convertView.findViewById(R.id.imageFood);
-        Glide.with(this.getContext())
+        Glide.with(getContext())
                 .load(myBaiDang.getImage())
                 .placeholder(R.drawable.logo_app)
                 .error(R.drawable.ic_launcher_background)
                 .into(imgItem);
+
         TextView nameItem = convertView.findViewById(R.id.textFoodName);
         nameItem.setText(myBaiDang.getTenMon());
+
         return convertView;
     }
 }
