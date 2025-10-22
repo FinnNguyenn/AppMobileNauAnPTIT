@@ -1,32 +1,22 @@
-package com.example.myapplication.UI;
+package com.example.myapplication.UI.fragments;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Intent;
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.widget.EditText;
 import android.widget.Button;
 
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.myapplication.UI.MainActivity;
 import com.example.myapplication.model.User;
 import com.example.myapplication.R;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
-import org.json.JSONObject;
-
-import java.util.*;
-public class ProfileeActivity extends AppCompatActivity{
+public class ProfileFragment extends AppCompatActivity{
 
     private Button btnLogout;
     private TextView userFullname;
@@ -50,7 +40,7 @@ public class ProfileeActivity extends AppCompatActivity{
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileeActivity.this, MainActivity.class);
+                Intent intent = new Intent(ProfileFragment.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -62,7 +52,7 @@ public class ProfileeActivity extends AppCompatActivity{
         textSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileeActivity.this, EditProfileActivity.class);
+                Intent intent = new Intent(ProfileFragment.this, EditProfileActivity.class);
                 intent.putExtra("user",user);
                 startActivity(intent);
             }
@@ -75,23 +65,23 @@ public class ProfileeActivity extends AppCompatActivity{
         botNav.setOnItemSelectedListener(menuItem -> {
             int id = menuItem.getItemId();
             if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(ProfileeActivity.this, HomeActivity.class);
+                Intent intent2 = new Intent(ProfileFragment.this, HomeFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
 
             } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(ProfileeActivity.this, ProfileeActivity.class);
+                Intent intent2 = new Intent(ProfileFragment.this, ProfileFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(ProfileeActivity.this, SearchActivity.class);
+                Intent intent2 = new Intent(ProfileFragment.this, SearchFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;
             }else if(id == R.id.menuAdd){
-                Intent intent2 = new Intent(ProfileeActivity.this, AddFoodPostActivity.class);
+                Intent intent2 = new Intent(ProfileFragment.this, AddFoodFragment.class);
                 intent2.putExtra("user", user);
                 startActivity(intent2);
                 return true;

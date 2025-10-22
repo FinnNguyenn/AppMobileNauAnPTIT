@@ -25,26 +25,26 @@
             android:name=".UI.RegisterActivity"
             android:exported="true"/>
         <activity
-            android:name=".UI.HomeActivity"
+            android:name=".UI.fragments.HomeFragment"
             android:exported="true"/>
         <activity
-            android:name=".UI.FoundFoodActivity"
+            android:name=".UI.fragments.FoundFoodActivity"
             android:exported="true"/>
         <activity
-            android:name=".UI.SeacrchFoodByNameActivity"
+            android:name=".UI.fragments.SeacrchFoodByNameActivity"
             android:exported="true"/>
         <activity
-            android:name=".UI.SearchActivity"
+            android:name=".UI.fragments.SearchFragment"
             android:exported="true"/>
         <activity
-            android:name=".UI.ProfileeActivity"
+            android:name=".UI.fragments.ProfileFragment"
             android:exported="true"/>
         <activity
-            android:name=".UI.EditProfileActivity"
+            android:name=".UI.fragments.EditProfileActivity"
             android:exported="true"/>
-        <activity android:name=".UI.DetailFoodActivity"
+        <activity android:name=".UI.fragments.DetailFoodFragment"
             android:exported="true"/>
-        <activity android:name=".UI.AddFoodPostActivity"
+        <activity android:name=".UI.fragments.AddFoodFragment"
             android:exported="true"/>
 
     </application>
