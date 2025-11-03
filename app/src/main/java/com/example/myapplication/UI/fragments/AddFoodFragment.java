@@ -123,37 +123,6 @@ public class AddFoodFragment extends AppCompatActivity {
             }
         });
 
-        BottomNavigationView botNav = findViewById(R.id.bottomNavView);
-        botNav.setSelectedItemId(R.id.menuAdd);
-
-
-        botNav.setOnItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(AddFoodFragment.this, HomeFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-
-            } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(AddFoodFragment.this, ProfileFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(AddFoodFragment.this, SearchFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            }
-            else if(id == R.id.menuAdd){
-                Intent intent2 = new Intent(AddFoodFragment.this, AddFoodFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            }
-            return false;
-        });
 
 
     }

@@ -1,93 +1,91 @@
 package com.example.myapplication.UI.fragments;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Intent;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.myapplication.UI.EditProfileActivity;
 import com.example.myapplication.UI.MainActivity;
 import com.example.myapplication.model.User;
 import com.example.myapplication.R;
 
+public class ProfileFragment extends Fragment {
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-public class ProfileFragment extends AppCompatActivity{
+    private static final String ARG_USER = "user";
 
     private Button btnLogout;
     private TextView userFullname;
     private TextView userEmail;
     private LinearLayout textSettings;
-    private LinearLayout viewPosts;
+    // private LinearLayout viewPosts;
     private User user;
-    private BottomNavigationView bottomNavigationView;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_profile);
-        btnLogout = findViewById(R.id.btnLogout);
-        userFullname = findViewById(R.id.userFullName);
-        userEmail = findViewById(R.id.userEmail);
-        textSettings = findViewById(R.id.editProfileBtn);
-        bottomNavigationView = findViewById(R.id.bottomNavView);
-//        viewPosts = findViewById(R.id.postsBtn);    để sau
-        Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("user");
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileFragment.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        String fullname = user.getFullname();
-        String email = user.getEmail();
-        userFullname.setText(fullname);
-        userEmail.setText(email);
-        textSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileFragment.this, EditProfileActivity.class);
-                intent.putExtra("user",user);
-                startActivity(intent);
-            }
-        });
-
-
-        BottomNavigationView botNav = findViewById(R.id.bottomNavView);
-        botNav.setSelectedItemId(R.id.menuProfile);
-
-        botNav.setOnItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            if (id == R.id.menuHome) {
-                Intent intent2 = new Intent(ProfileFragment.this, HomeFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-
-            } else if (id == R.id.menuProfile){
-                Intent intent2 = new Intent(ProfileFragment.this, ProfileFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            } else if (id == R.id.menuSearch){
-                Intent intent2 = new Intent(ProfileFragment.this, SearchFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            }else if(id == R.id.menuAdd){
-                Intent intent2 = new Intent(ProfileFragment.this, AddFoodFragment.class);
-                intent2.putExtra("user", user);
-                startActivity(intent2);
-                return true;
-            }
-            return false;
-        });
+    public static ProfileFragment newInstance(User user) {
+        ProfileFragment f = new ProfileFragment();
+        Bundle b = new Bundle();
+        b.putSerializable(ARG_USER, user);
+        f.setArguments(b);
+        return f;
     }
 
+    public ProfileFragment() {}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            user = (User) args.getSerializable(ARG_USER);
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.user_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        btnLogout = view.findViewById(R.id.btnLogout);
+        userFullname = view.findViewById(R.id.userFullName);
+        userEmail = view.findViewById(R.id.userEmail);
+        textSettings = view.findViewById(R.id.editProfileBtn);
+        // viewPosts = view.findViewById(R.id.postsBtn);
+
+        if (user != null) {
+            userFullname.setText(user.getFullname());
+            userEmail.setText(user.getEmail());
+        } else {
+            Toast.makeText(requireContext(), "Không có thông tin người dùng", Toast.LENGTH_SHORT).show();
+        }
+
+        btnLogout.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            requireActivity().finish();
+        });
+
+        textSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), EditProfileActivity.class);
+            intent.putExtra(ARG_USER, user);
+            startActivity(intent);
+        });
+
+    }
 }

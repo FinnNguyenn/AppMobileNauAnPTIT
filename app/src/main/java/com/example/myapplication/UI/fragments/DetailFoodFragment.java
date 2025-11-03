@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -30,12 +31,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class DetailFoodFragment extends Fragment {
+    public static final String TAG = DetailFoodFragment.class.getName();
     private BaiDang baiDang;
     private User user;
 
     private ArrayNLAdapter adapterNL;
     private YouTubePlayerView youtubePlayerView;
     private TabHost tabHost;
+    ImageButton btnBack;
 
     public static DetailFoodFragment newInstance(BaiDang baiDang, User user) {
         DetailFoodFragment fragment = new DetailFoodFragment();
@@ -103,6 +106,9 @@ public class DetailFoodFragment extends Fragment {
                 youTubePlayer.loadVideo(videoId, 0);
             }
         });
+
+        btnBack = view.findViewById(R.id.btnBackF);
+        btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
     }
 
     private void addControl(View view) {

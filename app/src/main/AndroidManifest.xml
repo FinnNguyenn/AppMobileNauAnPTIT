@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,40 +13,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         android:networkSecurityConfig="@xml/network_security_config">
+
         <activity
             android:name=".UI.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".UI.RegisterActivity"
-            android:exported="true"/>
+            android:exported="true" />
+
         <activity
-            android:name=".UI.fragments.HomeFragment"
-            android:exported="true"/>
+            android:name=".UI.HomeActivity"
+            android:exported="true" />
+
         <activity
             android:name=".UI.fragments.FoundFoodActivity"
-            android:exported="true"/>
+            android:exported="true" />
+
         <activity
             android:name=".UI.fragments.SeacrchFoodByNameActivity"
-            android:exported="true"/>
+            android:exported="true" />
+
         <activity
-            android:name=".UI.fragments.SearchFragment"
-            android:exported="true"/>
-        <activity
-            android:name=".UI.fragments.ProfileFragment"
-            android:exported="true"/>
-        <activity
-            android:name=".UI.fragments.EditProfileActivity"
-            android:exported="true"/>
-        <activity android:name=".UI.fragments.DetailFoodFragment"
-            android:exported="true"/>
-        <activity android:name=".UI.fragments.AddFoodFragment"
-            android:exported="true"/>
+            android:name=".UI.EditProfileActivity"
+            android:exported="true" />
 
     </application>
 

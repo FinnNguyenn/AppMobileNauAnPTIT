@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/btnBack"
+        android:id="@+id/btnBackF"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/white_rectangle_background"
@@ -48,7 +48,6 @@
         android:layout_height="0dp"
         android:id="@+id/scrollView"
         app:layout_constraintTop_toBottomOf="@id/imgFood"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavView"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
@@ -124,22 +123,5 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavView"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        app:backgroundTint="@color/colorWhite"
-        app:itemIconSize="30dp"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/navigation_menu" />
-
-    <View
-        android:id="@+id/viewDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavView"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

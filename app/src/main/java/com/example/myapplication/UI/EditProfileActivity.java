@@ -1,4 +1,4 @@
-package com.example.myapplication.UI.fragments;
+package com.example.myapplication.UI;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.myapplication.UI.fragments.ProfileFragment;
 import com.example.myapplication.model.User;
 import com.example.myapplication.R;
 
@@ -50,14 +51,7 @@ public class EditProfileActivity extends AppCompatActivity{
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("user");
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditProfileActivity.this, ProfileFragment.class);
-                intent.putExtra("user",user);
-                startActivity(intent);
-            }
-        });
+        btnBack.setOnClickListener(v -> finish());
 
         myUsername.setText(user.getUsername());
         myAddress.setText(user.getAddress());

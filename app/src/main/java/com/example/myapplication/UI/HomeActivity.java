@@ -23,9 +23,9 @@ import java.util.Deque;
 
 public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFoodItemSelectedListener {
 
-    private static final String TAG_HOME    = "HomeFragment";
-    private static final String TAG_SEARCH  = "SearchFragment";
-    private static final String TAG_ADD     = "AddFoodFragment";
+    private static final String TAG_HOME = "HomeFragment";
+//    private static final String TAG_SEARCH = "SearchFragment";
+//    private static final String TAG_ADD = "AddFoodFragment";
     private static final String TAG_PROFILE = "ProfileFragment";
 
     private BottomNavigationView bottomNav;
@@ -34,7 +34,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
     private final Deque<Integer> tabHistory = new ArrayDeque<>();
     private int currentTabId = R.id.menuHome;
 
-    private User user; // object truyền cho các fragment
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +58,10 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
             return true;
         });
 
-        // Tab mặc định
         bottomNav.setSelectedItemId(R.id.menuHome);
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // Quay về tab trước nếu có lịch sử
                 Integer previousTab = tabHistory.pollFirst();
                 if (previousTab != null) {
                     bottomNav.setSelectedItemId(previousTab);
@@ -91,20 +89,20 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
 
     private void setupFragments() {
         FragmentManager fm = getSupportFragmentManager();
-        homeFragment    = fm.findFragmentByTag(TAG_HOME);
-        searchFragment  = fm.findFragmentByTag(TAG_SEARCH);
-        addFragment     = fm.findFragmentByTag(TAG_ADD);
+        homeFragment = fm.findFragmentByTag(TAG_HOME);
+//        searchFragment = fm.findFragmentByTag(TAG_SEARCH);
+//        addFragment = fm.findFragmentByTag(TAG_ADD);
         profileFragment = fm.findFragmentByTag(TAG_PROFILE);
 
-        if (homeFragment == null)    homeFragment    = HomeFragment.newInstance(user);
-//        if (searchFragment == null)  searchFragment  = SearchFragment.newInstance(user);
-//        if (addFragment == null)     addFragment     = AddFoodFragment.newInstance(user);
-//        if (profileFragment == null) profileFragment = ProfileFragment.newInstance(user);
+        if (homeFragment == null) homeFragment = HomeFragment.newInstance(user);
+//        if (searchFragment == null) searchFragment = SearchFragment.newInstance(user);
+//        if (addFragment == null) addFragment = AddFoodFragment.newInstance(user);
+        if (profileFragment == null) profileFragment = ProfileFragment.newInstance(user);
 
         fm.beginTransaction()
                 .add(R.id.fragment_container, homeFragment, TAG_HOME)
-                .add(R.id.fragment_container, searchFragment, TAG_SEARCH).hide(searchFragment)
-                .add(R.id.fragment_container, addFragment, TAG_ADD).hide(addFragment)
+//                .add(R.id.fragment_container, searchFragment, TAG_SEARCH).hide(searchFragment)
+//                .add(R.id.fragment_container, addFragment, TAG_ADD).hide(addFragment)
                 .add(R.id.fragment_container, profileFragment, TAG_PROFILE).hide(profileFragment)
                 .commit();
 
@@ -125,10 +123,10 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
     private Fragment getFragmentByTabId(int tabId) {
         if (tabId == R.id.menuHome) {
             return homeFragment;
-        } else if (tabId == R.id.menuSearch) {
-            return searchFragment;
-        } else if (tabId == R.id.menuAdd) {
-            return addFragment;
+//        } else if (tabId == R.id.menuSearch) {
+//            return searchFragment;
+//        } else if (tabId == R.id.menuAdd) {
+//            return addFragment;
         } else if (tabId == R.id.menuProfile) {
             return profileFragment;
         }
@@ -141,8 +139,10 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, detailFragment)
-                .addToBackStack(null) // This allows user to press back to return to HomeFragment
+                .add(R.id.fragment_container, detailFragment)
+                .hide(activeFragment)
+                .addToBackStack(DetailFoodFragment.TAG)
                 .commit();
+        activeFragment = detailFragment;
     }
 }

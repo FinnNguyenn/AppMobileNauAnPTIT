@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         if (!logginUser.getFullname().isEmpty()) {
-                            Intent intent = new Intent(MainActivity.this, HomeFragment.class);
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                             intent.putExtra("user",logginUser);
                             startActivity(intent);
                         } else {
