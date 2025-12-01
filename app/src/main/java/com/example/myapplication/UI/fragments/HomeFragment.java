@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,12 +22,12 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.BaiDang;
 import com.example.myapplication.model.NguyenLieu;
 import com.example.myapplication.model.User;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -38,12 +37,15 @@ public class HomeFragment extends Fragment {
 
     private OnFoodItemSelectedListener listener;
     private User user;
+    private TextView fullname;
     private GridView gv;
     private ArrayList<BaiDang> listBD;
     private MyArrayAdapter myAdapter;
-    private ArrayList<NguyenLieu> nguyenLieu;
-    Button btnFavorite;
-    Button btnRecommend;
+    private MaterialButton btnFavorite;
+    private MaterialButton btnRecommend;
+    private MaterialButton btnRecent;
+    private MaterialButton currentSltBtn;
+
 
     public static HomeFragment newInstance(User user) {
         HomeFragment fragment = new HomeFragment();
@@ -74,8 +76,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.home, container, false);
     }
 
@@ -87,18 +88,40 @@ public class HomeFragment extends Fragment {
         listBD = new ArrayList<>();
         btnFavorite = view.findViewById(R.id.btnFavorite);
         btnRecommend = view.findViewById(R.id.btnRecommend);
+        btnRecent = view.findViewById(R.id.btnRecent);
+        fullname = view.findViewById(R.id.textFullName);
+        fullname.setText(user.getFullname());
         myAdapter = new MyArrayAdapter(requireContext(), R.layout.layout_item, listBD);
         gv.setAdapter(myAdapter);
 
+        btnRecommend.setSelected(true);
+        currentSltBtn = btnRecommend;
         takeBD();
 
-        btnFavorite.setOnClickListener(v -> takeFAV());
-        btnRecommend.setOnClickListener(v -> takeBD());
+        View.OnClickListener buttonClickListener = v -> {
+            if (currentSltBtn != null) {
+                currentSltBtn.setSelected(false);
+            }
+            v.setSelected(true);
+            currentSltBtn = (MaterialButton) v;
+
+            if (v.getId() == R.id.btnRecommend) {
+                takeBD();
+            } else if (v.getId() == R.id.btnFavorite) {
+                takeFAV();
+            }
+        };
+
+        btnRecommend.setOnClickListener(buttonClickListener);
+        btnFavorite.setOnClickListener(buttonClickListener);
+        btnRecent.setOnClickListener(buttonClickListener);
 
         gv.setOnItemClickListener((parent, itemView, position, id) -> {
             BaiDang chonBD = listBD.get(position);
             Toast.makeText(requireContext(), "Bạn đã chọn món " + chonBD.getTenMon(), Toast.LENGTH_SHORT).show();
-            listener.onFoodItemSelected(chonBD);
+            if (listener != null) {
+                listener.onFoodItemSelected(chonBD);
+            }
         });
     }
 
@@ -121,11 +144,11 @@ public class HomeFragment extends Fragment {
                             baiDang.setLuotThich(obj.optInt("luotThich", 0));
                             baiDang.setImage(obj.optString("image", ""));
                             JSONArray nlArray = obj.getJSONArray("nguyenLieu");
-                            nguyenLieu = new ArrayList<>();
+                            ArrayList<NguyenLieu> nguyenLieuList = new ArrayList<>();
                             for (int j = 0; j < nlArray.length(); j++) {
-                                nguyenLieu.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
+                                nguyenLieuList.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
                             }
-                            baiDang.setNguyenLieu(nguyenLieu);
+                            baiDang.setNguyenLieu(nguyenLieuList);
                             listBD.add(baiDang);
                         }
                         myAdapter.notifyDataSetChanged();
@@ -139,7 +162,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void takeFAV() {
-        if (user == null) return;
+        if (user == null) {
+            return;
+        }
         String url = "https://mobilenodejs.onrender.com/api/nguoidung/fav/" + user.getId();
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -158,11 +183,11 @@ public class HomeFragment extends Fragment {
                             baiDang.setLuotThich(obj.optInt("luotThich", 0));
                             baiDang.setImage(obj.optString("image", ""));
                             JSONArray nlArray = obj.getJSONArray("nguyenLieu");
-                            nguyenLieu = new ArrayList<>();
+                            ArrayList<NguyenLieu> nguyenLieuList = new ArrayList<>();
                             for (int j = 0; j < nlArray.length(); j++) {
-                                nguyenLieu.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
+                                nguyenLieuList.add(new NguyenLieu(nlArray.getJSONObject(j).getString("_id"), nlArray.getJSONObject(j).getString("ten")));
                             }
-                            baiDang.setNguyenLieu(nguyenLieu);
+                            baiDang.setNguyenLieu(nguyenLieuList);
                             listBD.add(baiDang);
                         }
                         myAdapter.notifyDataSetChanged();

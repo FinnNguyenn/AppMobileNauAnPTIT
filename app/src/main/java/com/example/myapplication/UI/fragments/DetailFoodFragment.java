@@ -99,11 +99,12 @@ public class DetailFoodFragment extends Fragment {
         getLifecycle().addObserver(youtubePlayerView);
         String linkYtb = baiDang.getLinkYtb();
         String videoId = extractYoutubeVideoId(linkYtb);
-
         youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NotNull YouTubePlayer youTubePlayer) {
                 youTubePlayer.loadVideo(videoId, 0);
+                youTubePlayer.unMute();
+                youTubePlayer.setVolume(100);
             }
         });
 
@@ -129,7 +130,7 @@ public class DetailFoodFragment extends Fragment {
 
         tabHost.setOnTabChangedListener(tabId -> updateTabStyles());
     }
-    
+
     private void updateTabStyles() {
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             View tabView = tabHost.getTabWidget().getChildAt(i);
@@ -146,18 +147,26 @@ public class DetailFoodFragment extends Fragment {
 
     private String extractYoutubeVideoId(String url) {
         if (url == null || url.isEmpty()) return "";
+
         if (url.contains("v=")) {
             String id = url.substring(url.indexOf("v=") + 2);
             int ampIndex = id.indexOf("&");
-            if (ampIndex != -1) id = id.substring(0, ampIndex);
+            if (ampIndex != -1) {
+                id = id.substring(0, ampIndex);
+            }
             return id;
         }
+
+
         if (url.contains("youtu.be/")) {
             String id = url.substring(url.indexOf("youtu.be/") + 9);
             int qmIndex = id.indexOf("?");
-            if (qmIndex != -1) id = id.substring(0, qmIndex);
+            if (qmIndex != -1) {
+                id = id.substring(0, qmIndex);
+            }
             return id;
         }
+
         return url;
     }
 

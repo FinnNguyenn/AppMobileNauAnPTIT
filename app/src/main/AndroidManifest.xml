@@ -36,10 +36,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".UI.fragments.SeacrchFoodByNameActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".UI.EditProfileActivity"
             android:exported="true" />
 

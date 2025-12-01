@@ -7,17 +7,18 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp"
+    android:backgroundTint="@color/black"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:id="@+id/itemLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:orientation="vertical"
         android:gravity="center"
         android:padding="15dp"
         android:layout_margin="8dp"
-        android:background="@drawable/white_rectangle_background">
+        android:background="@drawable/back_rectangle_background">
 
         <ImageView
             android:id="@+id/imageFood"
@@ -33,8 +34,7 @@
             android:gravity="center"
             android:text="Tên món"
             android:textSize="20sp"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold" />
+            android:textColor="@color/colorWhite" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -13,6 +13,7 @@ import com.example.myapplication.UI.fragments.AddFoodFragment;
 import com.example.myapplication.UI.fragments.DetailFoodFragment;
 import com.example.myapplication.UI.fragments.HomeFragment;
 import com.example.myapplication.UI.fragments.ProfileFragment;
+import com.example.myapplication.UI.fragments.SeacrchFoodByNameFragment;
 import com.example.myapplication.UI.fragments.SearchFragment;
 import com.example.myapplication.model.BaiDang;
 import com.example.myapplication.model.User;
@@ -21,10 +22,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFoodItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFoodItemSelectedListener,
+        SearchFragment.OnSearchByNameClickedListener {
 
     private static final String TAG_HOME = "HomeFragment";
-//    private static final String TAG_SEARCH = "SearchFragment";
+    private static final String TAG_SEARCH = "SearchFragment";
 //    private static final String TAG_ADD = "AddFoodFragment";
     private static final String TAG_PROFILE = "ProfileFragment";
 
@@ -90,18 +92,18 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
     private void setupFragments() {
         FragmentManager fm = getSupportFragmentManager();
         homeFragment = fm.findFragmentByTag(TAG_HOME);
-//        searchFragment = fm.findFragmentByTag(TAG_SEARCH);
+        searchFragment = fm.findFragmentByTag(TAG_SEARCH);
 //        addFragment = fm.findFragmentByTag(TAG_ADD);
         profileFragment = fm.findFragmentByTag(TAG_PROFILE);
 
         if (homeFragment == null) homeFragment = HomeFragment.newInstance(user);
-//        if (searchFragment == null) searchFragment = SearchFragment.newInstance(user);
+        if (searchFragment == null) searchFragment = SearchFragment.newInstance(user);
 //        if (addFragment == null) addFragment = AddFoodFragment.newInstance(user);
         if (profileFragment == null) profileFragment = ProfileFragment.newInstance(user);
 
         fm.beginTransaction()
                 .add(R.id.fragment_container, homeFragment, TAG_HOME)
-//                .add(R.id.fragment_container, searchFragment, TAG_SEARCH).hide(searchFragment)
+                .add(R.id.fragment_container, searchFragment, TAG_SEARCH).hide(searchFragment)
 //                .add(R.id.fragment_container, addFragment, TAG_ADD).hide(addFragment)
                 .add(R.id.fragment_container, profileFragment, TAG_PROFILE).hide(profileFragment)
                 .commit();
@@ -123,8 +125,8 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
     private Fragment getFragmentByTabId(int tabId) {
         if (tabId == R.id.menuHome) {
             return homeFragment;
-//        } else if (tabId == R.id.menuSearch) {
-//            return searchFragment;
+        } else if (tabId == R.id.menuSearch) {
+            return searchFragment;
 //        } else if (tabId == R.id.menuAdd) {
 //            return addFragment;
         } else if (tabId == R.id.menuProfile) {
@@ -144,5 +146,18 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFo
                 .addToBackStack(DetailFoodFragment.TAG)
                 .commit();
         activeFragment = detailFragment;
+    }
+    @Override
+    public void onSearchByNameClicked(User user) {
+        SeacrchFoodByNameFragment searchFragment = SeacrchFoodByNameFragment.newInstance(user);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, searchFragment, SeacrchFoodByNameFragment.TAG)
+                .hide(activeFragment)
+                .addToBackStack(SeacrchFoodByNameFragment.TAG)
+                .commit();
+
+        activeFragment = searchFragment;
     }
 }
