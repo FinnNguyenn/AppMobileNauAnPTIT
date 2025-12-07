@@ -109,7 +109,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void RegisterWithAPI(User user){
-        String url = "https://mobilenodejs.onrender.com/api/nguoidung/register";
+        String url = "https://sg87k2rd-3000.asse.devtunnels.ms/api/nguoidung/register";
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         HashMap<String,String> params = new HashMap<>();
         params.put("username",user.getUsername());

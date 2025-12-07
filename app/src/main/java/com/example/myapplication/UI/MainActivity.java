@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.R;
 import com.example.myapplication.fragment.LoginFragment;
-import com.example.myapplication.fragment.RegisterFragment;
 import com.example.myapplication.interfaces.NavigationHost;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost {

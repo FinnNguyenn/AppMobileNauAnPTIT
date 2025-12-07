@@ -19,8 +19,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.R;
-//import com.example.myapplication.UI.HomeActivity;
-import com.example.myapplication.UI.MainActivity;
+import com.example.myapplication.UI.HomeActivity;
 import com.example.myapplication.interfaces.NavigationHost;
 import com.example.myapplication.model.User;
 
@@ -36,6 +35,8 @@ public class LoginFragment extends Fragment {
     private TextView errorMessage;
     private User user;
     private TextView registerButton;
+    private TextView forgotPassword;
+
 
     @Nullable
     @Override
@@ -53,6 +54,8 @@ public class LoginFragment extends Fragment {
         myButton = view.findViewById(R.id.btnLogin);
         registerButton = view.findViewById(R.id.textViewLinkRegister);
         errorMessage = view.findViewById(R.id.errorMessage);
+        forgotPassword = view.findViewById(R.id.textForgotPassword);
+
 
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +83,14 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getActivity() instanceof NavigationHost) {
+                    ((NavigationHost) requireActivity()).navigateTo(new ForgotPasswordFragment(), true);
+                }
+            }
+        });
     }
 
     private void displayError(String message){
@@ -90,7 +101,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginWithAPI(String username, String password){
-        String url = "https://mobilenodejs.onrender.com/api/nguoidung/login";
+        String url = "https://sg87k2rd-3000.asse.devtunnels.ms/api/nguoidung/login";
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         HashMap<String,String> params = new HashMap<>();
         params.put("username",username);
@@ -109,8 +120,8 @@ public class LoginFragment extends Fragment {
                         String email = response.getString("email");
                         String phone = response.getString("phone");
                         String userName = response.getString("username");
-                        String passWord = response.getString("password");
-                        User logginUser= new User(id, userName,passWord,name,address,email,phone);
+//                        String passWord = response.getString("password");
+                        User logginUser= new User(id, userName,password,name,address,email,phone);
 
 
                         if (!logginUser.getFullname().isEmpty()) {
